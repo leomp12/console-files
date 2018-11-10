@@ -1,0 +1,26 @@
+{
+  "name": "console-files",
+  "version": "1.0.0",
+  "description": "Simple package to handle console output to files ",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leomp12/console-files.git"
+  },
+  "keywords": [
+    "console",
+    "logger",
+    "files",
+    "debug",
+    "output"
+  ],
+  "author": "Leonardo Matos de Paula",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leomp12/console-files/issues"
+  },
+  "homepage": "https://github.com/leomp12/console-files#readme"
+}
