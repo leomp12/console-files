@@ -2,13 +2,15 @@
 
 // Node filesystem module
 const fs = require('fs')
+// use Node OS module to get current hostname
+const host = require('os').hostname()
 
 if (!process.env.LOGGER_SKIP_FATAL) {
   // also debug fatal errors
   process.on('uncaughtException', err => {
     // fatal error
     // log to file before exit
-    let msg = '\n[' + new Date().toString() + ']\n'
+    let msg = '\n' + header() + '\n'
     if (err) {
       if (err.hasOwnProperty('stack')) {
         msg += err.stack
@@ -20,6 +22,7 @@ if (!process.env.LOGGER_SKIP_FATAL) {
       msg += '\n'
     }
 
+    // append error message to stderr file
     fs.appendFile(process.env.LOGGER_FATAL_ERRORS || '/var/log/node-stderr', msg, () => {
       process.exit(1)
     })
@@ -49,9 +52,7 @@ function error (out, desc) {
 function header () {
   // return default header to write in log file
   // have to be function to use correct date and time
-  const d = new Date()
-  const host = require('os').hostname()
-  return host + ' [' + d.toString() + '] '
+  return host + ' [' + new Date().toString() + '] '
 }
 
 // log files
