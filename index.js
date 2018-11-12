@@ -1,5 +1,31 @@
 'use strict'
 
+// Node filesystem module
+const fs = require('fs')
+
+if (!process.env.LOGGER_SKIP_FATAL) {
+  // also debug fatal errors
+  process.on('uncaughtException', err => {
+    // fatal error
+    // log to file before exit
+    let msg = '\n[' + new Date().toString() + ']\n'
+    if (err) {
+      if (err.hasOwnProperty('stack')) {
+        msg += err.stack
+      } else if (err.hasOwnProperty('message')) {
+        msg += err.message
+      } else {
+        msg += err.toString()
+      }
+      msg += '\n'
+    }
+
+    fs.appendFile(process.env.LOGGER_FATAL_ERRORS || '/var/log/node-stderr', msg, () => {
+      process.exit(1)
+    })
+  })
+}
+
 // function to substitute console.log
 function log (out, desc) {
   logger.log(header())
@@ -28,7 +54,6 @@ function header () {
   return host + ' [' + d.toString() + '] '
 }
 
-const fs = require('fs')
 // log files
 const output = fs.createWriteStream(process.env.LOGGER_OUTPUT || '/var/log/node-logger.out')
 const errors = fs.createWriteStream(process.env.LOGGER_ERRORS || '/var/log/node-logger.err')
