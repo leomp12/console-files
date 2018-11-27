@@ -23,7 +23,7 @@ if (!process.env.LOGGER_SKIP_FATAL) {
     }
 
     // append error message to stderr file
-    fs.appendFile(process.env.LOGGER_FATAL_ERRORS || '/var/log/node-stderr', msg, () => {
+    fs.appendFile(process.env.LOGGER_FATAL_ERRORS || process.cwd() + '/_stderr', msg, () => {
       process.exit(1)
     })
   })
@@ -56,8 +56,8 @@ function header () {
 }
 
 // log files
-const output = fs.createWriteStream(process.env.LOGGER_OUTPUT || '/var/log/node-logger.out')
-const errors = fs.createWriteStream(process.env.LOGGER_ERRORS || '/var/log/node-logger.err')
+const output = fs.createWriteStream(process.env.LOGGER_OUTPUT || process.cwd() + '/logger.out')
+const errors = fs.createWriteStream(process.env.LOGGER_ERRORS || process.cwd() + '/logger.err')
 // declares logger with Console class of global console
 const logger = new console.Console(output, errors)
 
