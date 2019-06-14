@@ -37,11 +37,11 @@ if (!process.env.LOGGER_SKIP_FATAL && (!devMode || process.env.LOGGER_FATAL_ERRO
   })
 }
 
-let output, errors, logger, isDefaultConsole
+let logger, isDefaultConsole
 if (!devMode || process.env.LOGGER_OUTPUT) {
   // log files
-  output = fs.createWriteStream(process.env.LOGGER_OUTPUT || path.join(process.cwd(), 'logger.out'))
-  errors = fs.createWriteStream(process.env.LOGGER_ERRORS || path.join(process.cwd(), 'logger.err'))
+  const output = fs.createWriteStream(process.env.LOGGER_OUTPUT || path.join(process.cwd(), 'logger.out'))
+  const errors = fs.createWriteStream(process.env.LOGGER_ERRORS || path.join(process.cwd(), 'logger.err'))
   // declares logger with Console class of global console
   logger = new console.Console(output, errors)
 } else {
@@ -51,26 +51,33 @@ if (!devMode || process.env.LOGGER_OUTPUT) {
   isDefaultConsole = true
 }
 
-const echo = (type, out, desc) => {
-  // outputs to log or error file
-  logger[type](header())
-  if (desc) {
-    // additional description
-    logger[type](desc)
-  }
-  logger[type](out)
+const echo = (type, msg) => {
+  logger[type](msg)
   if (devMode && !isDefaultConsole) {
-    // also outputs with default console
-    console[type](out)
+    // also outputs to default console
+    console[type](msg)
   }
-  return logger[type]()
 }
 
+// handlers for Console log and error
+const handlers = {}
+;[ 'log', 'error' ].forEach(type => {
+  handlers[type] = function () {
+    // write header first
+    echo(type, header())
+    for (let i = 0; i < arguments.length; i++) {
+      echo(type, arguments[i])
+    }
+    // break line
+    echo(type, '  ---  //  ---  \n')
+  }
+})
+
 // function to replace console.log
-const log = (out, desc) => echo('log', out, desc)
+const log = handlers.log
 
 // function to replace console.error
-const error = (out, desc) => echo('error', out, desc)
+const error = handlers.error
 
 // returns object with all properties of Console class
 module.exports = {
