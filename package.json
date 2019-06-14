@@ -1,10 +1,11 @@
 {
   "name": "console-files",
-  "version": "2.2.0",
-  "description": "Simple package to handle console output to files ",
-  "main": "index.js",
+  "version": "2.3.0",
+  "description": "Simple package to handle console output to files",
+  "main": "main.js",
   "scripts": {
-    "test": "node ./index.js"
+    "test": "node ./test.js",
+    "test:production": "NODE_ENV=production node ./test.js"
   },
   "repository": {
     "type": "git",
@@ -22,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/leomp12/console-files/issues"
   },
-  "homepage": "https://github.com/leomp12/console-files#readme"
+  "homepage": "https://github.com/leomp12/console-files#readme",
+  "devDependencies": {
+    "standard": "^12.0.1"
+  }
 }
