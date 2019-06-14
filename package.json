@@ -1,6 +1,6 @@
 {
   "name": "console-files",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "Simple package to handle console output to files",
   "main": "main.js",
   "scripts": {
