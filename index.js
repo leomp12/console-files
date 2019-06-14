@@ -55,11 +55,18 @@ function header () {
   return host + ' [' + new Date().toString() + '] '
 }
 
-// log files
-const output = fs.createWriteStream(process.env.LOGGER_OUTPUT || process.cwd() + '/logger.out')
-const errors = fs.createWriteStream(process.env.LOGGER_ERRORS || process.cwd() + '/logger.err')
-// declares logger with Console class of global console
-const logger = new console.Console(output, errors)
+let output, errors, logger
+if (process.env.NODE_ENV === 'production' || process.env.LOGGER_OUTPUT) {
+  // log files
+  output = fs.createWriteStream(process.env.LOGGER_OUTPUT || process.cwd() + '/logger.out')
+  errors = fs.createWriteStream(process.env.LOGGER_ERRORS || process.cwd() + '/logger.err')
+  // declares logger with Console class of global console
+  logger = new console.Console(output, errors)
+} else {
+  // dev mode
+  // use default Console
+  logger = console
+}
 
 // return object with main properties of console
 module.exports = {
