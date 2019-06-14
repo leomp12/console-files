@@ -1,5 +1,7 @@
 /test.out
 /test.err
+/logger.out
+/logger.err
 
 # Logs
 logs
